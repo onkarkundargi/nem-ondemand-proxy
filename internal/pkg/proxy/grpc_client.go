@@ -1,12 +1,12 @@
 /*
  * Copyright 2018-present Open Networking Foundation
-
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
-
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
-
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package main implements a client for Greeter service.
-package main
+// Implements a client for nem-ondemend-proxy.
+package proxy
 
 import (
 	"context"
@@ -30,18 +30,24 @@ import (
 	"time"
 )
 
-const (
-	//address     = "compose_rw_core_1:50057"
-	address = "voltha-rw-core.voltha:50057"
-	//kafka_address = "compose_kafka_1:9092"
-	kafka_address = "voltha-kafka.voltha:9092"
-	onuDeviceId   = "world"
-)
+/*
+ * TODO: Consider refactoring so that the kafka and grpc clients are
+ * initialized once rather than for each request that is handled.
+ *
+ */
 
-func connect(device_id *string) (*pb.Event, error) {
+type OnDemandHandler struct {
+}
+
+func NewOnDemandHandler() *OnDemandHandler {
+	var handler OnDemandHandler
+	return &handler
+}
+
+func (handler *OnDemandHandler) HandleRequest(device_id *string) (*pb.Event, error) {
 	// Set up a connection to the server.
-	log.Printf("voltha grpc client started, address=%s ...", address)
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	log.Printf("voltha grpc client started, address=%s ...", GlobalConfig.Server)
+	conn, err := grpc.Dial(GlobalConfig.Server, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Printf("did not connect: %v", err)
 		return nil, err
@@ -68,8 +74,8 @@ func connect(device_id *string) (*pb.Event, error) {
 		config := sarama.NewConfig()
 		config.ClientID = "go-kafka-consumer"
 		config.Consumer.Return.Errors = true
-		// Specify brokers address. This is default one
-		brokers := []string{kafka_address}
+
+		brokers := []string{GlobalConfig.Kafka}
 		// Create new consumer
 		master, err := sarama.NewConsumer(brokers, config)
 		if err != nil {
@@ -86,9 +92,11 @@ func connect(device_id *string) (*pb.Event, error) {
 		if err != nil {
 			panic(err)
 		}
+
 		// Get signnal for finish
 		doneCh := make(chan struct{})
 		go func() {
+			// TODO: Needs a timeout in here
 			for {
 				select {
 				case err := <-consumer.Errors():

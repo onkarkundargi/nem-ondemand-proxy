@@ -9,6 +9,7 @@ require (
 	github.com/golang/protobuf v1.3.2
 	github.com/google/uuid v1.1.1
 	github.com/jcmturner/gofork v1.0.0 // indirect
+	github.com/jessevdk/go-flags v1.4.0
 	github.com/opencord/voltha-protos/v3 v3.2.8
 	github.com/pierrec/lz4 v2.3.0+incompatible // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20190826022208-cac0b30c2563 // indirect
@@ -21,5 +22,5 @@ require (
 	google.golang.org/grpc v1.26.0
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/jcmturner/gokrb5.v7 v7.3.0 // indirect
-	gopkg.in/yaml.v2 v2.2.8 // indirect
+	gopkg.in/yaml.v2 v2.2.8
 )

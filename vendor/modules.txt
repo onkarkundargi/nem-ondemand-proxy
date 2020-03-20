@@ -25,6 +25,8 @@ github.com/hashicorp/go-uuid
 # github.com/jcmturner/gofork v1.0.0
 github.com/jcmturner/gofork/encoding/asn1
 github.com/jcmturner/gofork/x/crypto/pbkdf2
+# github.com/jessevdk/go-flags v1.4.0
+github.com/jessevdk/go-flags
 # github.com/klauspost/compress v1.9.7
 github.com/klauspost/compress/fse
 github.com/klauspost/compress/huff0
@@ -140,3 +142,5 @@ gopkg.in/jcmturner/gokrb5.v7/types
 # gopkg.in/jcmturner/rpc.v1 v1.1.0
 gopkg.in/jcmturner/rpc.v1/mstypes
 gopkg.in/jcmturner/rpc.v1/ndr
+# gopkg.in/yaml.v2 v2.2.8
+gopkg.in/yaml.v2

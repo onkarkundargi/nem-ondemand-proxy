@@ -15,17 +15,12 @@
 # -------------
 # Build stage
 
-FROM golang:1.12-alpine3.9 AS build-env
+FROM golang:1.13.8-alpine3.11 AS build-env
 
 # Install required packages
 RUN apk add --no-cache wget git make build-base protobuf protobuf-dev
 
-# Prepare directory structure
-RUN ["mkdir", "-p", "/build"]
-RUN ["mkdir", "-p", "$GOPATH/src", "$GOPATH/pkg", "$GOPATH/bin"]
-RUN ["mkdir", "-p", "$GOPATH/src/github.com/opencord/nem-ondemand-proxy"]
-
-WORKDIR $GOPATH/src/github.com/opencord/nem-ondemand-proxy
+WORKDIR /go/src
 
 COPY . ./
 
@@ -38,7 +33,7 @@ ARG org_opencord_vcs_dirty=unknown
 
 # Build nem-proxy
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
-RUN go build -o /build/nem-proxy
+RUN go build -mod=vendor -o /build/nem-proxy cmd/nem-ondemand-proxy/main.go
 # -------------
 # Image creation stage
 
